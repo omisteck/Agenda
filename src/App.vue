@@ -7,6 +7,15 @@
                 <p>Crud system with all function working</p>
             </div>
         </div>
+
+        <div class="row">
+        <div class="col-12 mb-3"><button
+        type="button"
+        class="btn btn-success"
+        @click="csvExport(agendas)"
+      >Export to CSV</button></div>
+      </div>
+
         <div class="row">
             <div class="col card-wrapper">
           <div class="card">
@@ -140,6 +149,22 @@ export default {
       this.msg.info = "Agenda deleted successfully!";
       this.msg.type = "success";
     },
+
+    csvExport(arrData) {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += [
+        Object.keys(arrData[0]).join(";"),
+        ...arrData.map(item => Object.values(item).join(";"))
+      ]
+        .join("\n")
+        .replace(/(^\[)|(\]$)/gm, "");
+
+      const data = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", data);
+      link.setAttribute("download", "exportAgenda.csv");
+      link.click();
+    }
   }
 };
 
