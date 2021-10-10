@@ -9,18 +9,16 @@
         </div>
         <div class="row">
             <div class="col card-wrapper">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Create Agenda</h4>
-                        <form><input class="form-control" type="text" placeholder="Title"><textarea class="form-control" placeholder="Description"></textarea><input class="form-control" type="date"><select class="form-select">
-                                <optgroup label="Agenda Status">
-                                    <option value="active" selected="">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </optgroup>
-                            </select><button class="btn btn-primary mt-4" type="submit">Create Agenda</button></form>
-                    </div>
-                </div>
+          <div class="card">
+            <div class="card-body">
+              
+              <div class="alert mb-4" v-if="msg.info"  :class="{'alert-success':msg.type=='success', 'alert-danger':msg.type=='error' }" role="alert">
+                {{ msg.info }}</div>
+              <h4 class="card-title">Create Agenda</h4>
+                <CreateAgenda @app-addAgenda ="add" />
             </div>
+          </div>
+        </div>
             <div class="col card-wrapper">
                 <div class="card">
                     <div class="card-body">
@@ -58,8 +56,44 @@
 </template>
 
 <script>
+import CreateAgenda from "./components/CreateAgenda.vue"
+
 export default {
   name: "app",
+
+   components: {
+    CreateAgenda
+  },
+  data: () => ({
+    agenda: {
+      title: "",
+      description: "",
+      time: "",
+      status: "",
+    },
+    agendas: [],
+    msg : {},
+  }),
+
+  methods: {
+    validate(data){
+      if(data.title != '' && data.description != ''  && data.time != ''  && data.status != '' ){
+        return true;
+      }
+      return false;
+    },
+    add(passAgenda) {
+      if(this.validate(passAgenda)){
+        this.agendas.push(passAgenda);
+        localStorage.setItem('agendas', JSON.stringify(this.agendas))
+        this.msg.info = "Agenda saved succesfully!";
+        this.msg.type = "success";
+      }else{
+        this.msg.info = "Please fill all detail to save agenda!";
+        this.msg.type = "error";
+      }
+    },
+  }
 };
 
 </script>
