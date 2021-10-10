@@ -24,7 +24,7 @@
             <div class="card-body">
               <div >
                 
-                <ListAgenda :agendas="agendas" />
+                <ListAgenda :agendas="agendas" @app-deleteAgenda ="deleteAgenda" />
               </div>
             </div>
           </div>
@@ -96,6 +96,13 @@ export default {
         this.msg.info = "Please fill all detail to save agenda!";
         this.msg.type = "error";
       }
+    },
+
+    deleteAgenda(index){
+      this.agendas.splice(index, 1);
+      localStorage.setItem('agendas', JSON.stringify(this.agendas))
+      this.msg.info = "Agenda deleted successfully!";
+      this.msg.type = "success";
     },
   }
 };
