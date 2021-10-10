@@ -24,7 +24,7 @@
             <div class="card-body">
               <div >
                 
-                <ListAgenda :agendas="agendas" @app-deleteAgenda ="deleteAgenda" />
+                <ListAgenda :agendas="agendas" @app-deleteAgenda ="deleteAgenda" @app-editAgenda ="editAgenda" />
               </div>
             </div>
           </div>
@@ -37,15 +37,34 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Agenda</h4><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form><input class="form-control" type="text" placeholder="Title"><textarea class="form-control" placeholder="Description"></textarea><input class="form-control" type="date"><select class="form-select">
-                            <optgroup label="Agenda Status">
-                                <option value="active" selected="">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </optgroup>
-                        </select></form>
-                </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button><button class="btn btn-primary" type="button">Update</button></div>
+              <form @submit.prevent="updaterecord">
+    <div class="modal-body">
+       
+              <div class="alert mb-4" v-if="msg.info"  :class="{'alert-success':msg.type=='success', 'alert-danger':msg.type=='error' }" role="alert">
+                {{ msg.info }}</div>
+        <input class="form-control" type="text" placeholder="Title" v-model="edit.title" />
+        
+        <textarea
+          class="form-control"
+          placeholder="Description"
+          v-model="edit.description"
+        ></textarea
+        >
+        <input class="form-control" type="date" v-model="edit.time" />
+        <select class="form-select" v-model="edit.status">
+          <optgroup label="Agenda Status">
+            <option value="active" selected="">Active</option>
+            <option value="inactive">Inactive</option>
+          </optgroup>
+        </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-light" type="button" data-bs-dismiss="modal">
+        Close</button
+      ><button class="btn btn-primary" type="submit">Update</button>
+      
+    </div>
+        </form>
             </div>
         </div>
     </div>
@@ -70,6 +89,7 @@ export default {
       time: "",
       status: "",
     },
+    edit : {},
     agendas: [],
     msg : {},
   }),
@@ -97,6 +117,22 @@ export default {
         this.msg.type = "error";
       }
     },
+
+    editAgenda(record){
+      this.indexHandler = record;
+      this.edit = this.agendas[record];
+    },
+
+    updaterecord(){
+        if(this.validate(this.edit)){
+          this.agendas[this.indexHandler] = this.edit;
+          localStorage.setItem('agendas', JSON.stringify(this.agendas))
+          this.msg.info = "Agenda updated succesfully!";
+          this.msg.type = "success";
+
+        }
+
+    },  
 
     deleteAgenda(index){
       this.agendas.splice(index, 1);

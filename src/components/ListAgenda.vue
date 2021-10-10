@@ -19,7 +19,7 @@
         >On {{agenda.time}}</span
       >
     </p>
-    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" ><i class="fa fa-edit"></i>&nbsp;Edit</a
+    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" @click="updateForm(index)" ><i class="fa fa-edit"></i>&nbsp;Edit</a
     ><a class="m-5 text-danger" href="#" @click="deleteAgenda(index)"
       ><i class="fa fa-trash-o"></i>&nbsp;Delete</a
     >
@@ -53,6 +53,10 @@ export default {
     deleteAgenda(index) {
       this.$emit("app-deleteAgenda", index);
     },
+
+     updateForm(index){
+        this.$emit("app-editAgenda", index);
+    }
   }
 
 }
