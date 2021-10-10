@@ -1,43 +1,57 @@
 <template>
-<div>
-<div>
-                  <h5 class="agenda-title d-inline-block">Agendas</h5>
-                  <input
-                    type="search"
-                    class="d-inline-block"
-                    style="margin-left: 10px"
-                    placeholder="Search Agendas"
-                    v-model="keyword"
-                  />
-                </div>
-  <div v-for="(agenda, index) of filteredNotes" class="card-item mb-3" :key="agenda.title">
-    <h6 class="text-text-muted mb-2">
-      {{ agenda.title }}<span :class="{'status_active': agenda.status == 'active', 'btn btn-danger': agenda.status == 'inactive'}" >{{agenda.status}}</span>
-    </h6>
-    <p>
-      {{ agenda.description }}<span class="date"
-        >On {{agenda.time}}</span
-      >
-    </p>
-    <a href="#" data-bs-toggle="modal" data-bs-target="#editModal" @click="updateForm(index)" ><i class="fa fa-edit"></i>&nbsp;Edit</a
-    ><a class="m-5 text-danger" href="#" @click="deleteAgenda(index)"
-      ><i class="fa fa-trash-o"></i>&nbsp;Delete</a
+  <div>
+    <div>
+      <h5 class="agenda-title d-inline-block">Agendas</h5>
+      <input
+        type="search"
+        class="d-inline-block"
+        style="margin-left: 10px"
+        placeholder="Search Agendas"
+        v-model="keyword"
+      />
+    </div>
+    <div
+      v-for="(agenda, index) of filteredNotes"
+      class="card-item mb-3"
+      :key="agenda.title"
     >
+      <h6 class="text-text-muted mb-2">
+        {{ agenda.title
+        }}<span
+          :class="{
+            status_active: agenda.status == 'active',
+            'btn btn-danger': agenda.status == 'inactive',
+          }"
+          >{{ agenda.status }}</span
+        >
+      </h6>
+      <p>
+        {{ agenda.description }}<span class="date">On {{ agenda.time }}</span>
+      </p>
+      <a
+        href="#"
+        data-bs-toggle="modal"
+        data-bs-target="#editModal"
+        @click="updateForm(index)"
+        ><i class="fa fa-edit"></i>&nbsp;Edit</a
+      ><a class="m-5 text-danger" href="#" @click="deleteAgenda(index)"
+        ><i class="fa fa-trash-o"></i>&nbsp;Delete</a
+      >
+    </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
-    props : ['agendas'],
+  props: ["agendas"],
 
-    data() {
-        return {
-            keyword: "",
-        }
-    },
+  data() {
+    return {
+      keyword: "",
+    };
+  },
 
-    computed: {
+  computed: {
     filteredNotes() {
       const { keyword } = this;
       if (!keyword) {
@@ -54,11 +68,10 @@ export default {
       this.$emit("app-deleteAgenda", index);
     },
 
-     updateForm(index){
-        this.$emit("app-editAgenda", index);
-    }
-  }
-
-}
+    updateForm(index) {
+      this.$emit("app-editAgenda", index);
+    },
+  },
+};
 </script>
 
