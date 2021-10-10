@@ -20,18 +20,15 @@
           </div>
         </div>
             <div class="col card-wrapper">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-item">
-                            <div>
-                                <h5 class="agenda-title d-inline-block">Agendas</h5><input type="search" class="d-inline-block" style="margin-left: 10px;" placeholder="Search Agendas">
-                            </div>
-                            <h6 class="text-text-muted mb-2">Subtitle<span class="status_active">Text</span></h6>
-                            <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.&nbsp;<span class="date">On 24th Dec, 2021</span></p><a href="#" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-edit"></i>&nbsp;Edit</a><a class="m-5 text-danger" href="#"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
-                        </div>
-                    </div>
-                </div>
+          <div class="card">
+            <div class="card-body">
+              <div >
+                
+                <ListAgenda :agendas="agendas" />
+              </div>
             </div>
+          </div>
+        </div>
         </div>
     </div>
     <div class="modal fade" role="dialog" tabindex="-1" id="editModal">
@@ -57,12 +54,14 @@
 
 <script>
 import CreateAgenda from "./components/CreateAgenda.vue"
+import ListAgenda from "./components/ListAgenda.vue"
 
 export default {
   name: "app",
 
    components: {
-    CreateAgenda
+    CreateAgenda,
+    ListAgenda
   },
   data: () => ({
     agenda: {
@@ -74,6 +73,11 @@ export default {
     agendas: [],
     msg : {},
   }),
+  mounted() {
+  if (localStorage.getItem("agendas")){
+    this.agendas = JSON.parse(localStorage.getItem("agendas"))
+  }
+  },
 
   methods: {
     validate(data){
