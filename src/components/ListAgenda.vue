@@ -10,7 +10,7 @@
                     v-model="keyword"
                   />
                 </div>
-  <div v-for="(agenda, index) in agendas" class="card-item mb-3" :key="agenda.title">
+  <div v-for="(agenda, index) of filteredNotes" class="card-item mb-3" :key="agenda.title">
     <h6 class="text-text-muted mb-2">
       {{ agenda.title }}<span :class="{'status_active': agenda.status == 'active', 'btn btn-danger': agenda.status == 'inactive'}" >{{agenda.status}}</span>
     </h6>
@@ -36,6 +36,18 @@ export default {
             keyword: "",
         }
     },
+
+    computed: {
+    filteredNotes() {
+      const { keyword } = this;
+      if (!keyword) {
+        return this.agendas;
+      }
+      return this.agendas.filter(({ title, description }) => {
+        return title.includes(keyword) || description.includes(keyword);
+      });
+    },
+  },
 
   methods: {
     deleteAgenda(index) {
