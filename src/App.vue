@@ -17,6 +17,8 @@
           >
             Export to CSV
           </button>
+
+          <input type="file" @change="onChange" style="margin-left: 10px">
         </div>
       </div>
 
@@ -119,6 +121,7 @@
 <script>
 import CreateAgenda from "./components/CreateAgenda.vue";
 import ListAgenda from "./components/ListAgenda.vue";
+import XLSX from "xlsx";
 
 export default {
   name: "app",
@@ -204,6 +207,35 @@ export default {
       link.setAttribute("download", "exportAgenda.csv");
       link.click();
     },
+
+      onChange(event) {
+      this.file = event.target.files ? event.target.files[0] : null;
+      if (this.file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          /* Parse data */
+          const bstr = e.target.result;
+          const wb = XLSX.read(bstr, { type: 'binary' });
+          /* Get first worksheet */
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          /* Convert array of arrays */
+          const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+          var d = new Date();
+          data.forEach(element => {
+            var fomated_data = {
+              title: element[0],
+              description: element[1],
+              time: (element[2])? element[2] : d.getFullYear() +'-'+d.getMonth()+'-'+d.getDate(),
+              status: (element[3])? element[3] : 'active'
+            };
+            this.add(fomated_data)
+          });
+        }
+        reader.readAsBinaryString(this.file);
+      }
+    }
   },
 };
 </script>
